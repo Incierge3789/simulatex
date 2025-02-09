@@ -1,0 +1,5 @@
+CONTAINER ID   IMAGE                              COMMAND                   CREATED          STATUS                    PORTS                                               NAMES
+0e0ad86a9f8b   simulatex-frontend                 "/docker-entrypoint.…"   11 minutes ago   Up 11 minutes             0.0.0.0:3000->80/tcp                                simulatex-frontend-1
+4d11f7f7e703   simulatex-backend                  "python app.py"           11 minutes ago   Up 11 minutes             0.0.0.0:42069->42069/tcp                            simulatex-backend-1
+3ac41f07bc8f   mongo:latest                       "docker-entrypoint.s…"   11 minutes ago   Up 11 minutes (healthy)   0.0.0.0:42042->27017/tcp                            simulatex-mongo-1
+604eeaf346f2   semitechnologies/weaviate:1.26.1   "/bin/weaviate --hos…"   11 minutes ago   Up 11 minutes (healthy)   0.0.0.0:30003->8080/tcp, 0.0.0.0:42070->50051/tcp   simulatex-weaviate-1

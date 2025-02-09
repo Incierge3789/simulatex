@@ -1,0 +1,13 @@
+token_economics_analysis:
+  - name: "initial_analysis"
+    agent: "gpt4"
+    next: "risk_analysis"
+  - name: "risk_analysis"
+    agent: "claude"
+    next: "data_visualization"
+  - name: "data_visualization"
+    agent: "gemini"
+    next: "market_analysis"
+  - name: "market_analysis"
+    agent: "analyst_ai"
+    next: null

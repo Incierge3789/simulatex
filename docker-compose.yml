@@ -1,0 +1,96 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_API_URL=http://localhost:42069
+    networks:
+      - simulatex-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "42069:42069"
+    depends_on:
+      mongo:
+        condition: service_healthy
+      weaviate:
+        condition: service_healthy
+    env_file:
+      - ./backend/.env
+    environment:
+      MONGO_URI: mongodb://mongo:27017/simulatex
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      AUTHENTICATION_OIDC_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      AUTHENTICATION_OIDC_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      USE_CLOUD: ${USE_CLOUD:-false}
+      WEAVIATE_URL: http://weaviate:8080
+      WEAVIATE_API_KEY: ${WEAVIATE_API_KEY}
+      GOOGLE_APPLICATION_CREDENTIALS: /app/service-account-key.json
+    volumes:
+      - ./service-account-key.json:/app/service-account-key.json
+    networks:
+      - simulatex-network
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "42042:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - simulatex-network
+    restart: unless-stopped
+
+  weaviate:
+    image: semitechnologies/weaviate:1.26.1
+    ports:
+      - "30003:8080"
+      - "42070:50051"
+    environment:
+      QUERY_DEFAULTS_LIMIT: "25"
+      PERSISTENCE_DATA_PATH: /var/lib/weaviate
+      DEFAULT_VECTORIZER_MODULE: text2vec-openai
+      ENABLE_MODULES: text2vec-openai
+      CLUSTER_HOSTNAME: "node1"
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: "true"  # 認証を一時的に無効化
+      OPENAI_APIKEY: ${OPENAI_API_KEY}
+      ENABLE_GRPC: "true"
+      GRPC_PORT: "50051"
+      AUTHENTICATION_APIKEY_ENABLED: "false"
+      AUTHENTICATION_APIKEY_ALLOWED_KEYS: ""
+      AUTHORIZATION_ADMINLIST_ENABLED: "false"
+
+    volumes:
+      - weaviate_data:/var/lib/weaviate
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/v1/.well-known/ready"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - simulatex-network
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
+  weaviate_data:
+
+networks:
+  simulatex-network:
+    driver: bridge
