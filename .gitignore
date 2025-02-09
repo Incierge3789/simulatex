@@ -30,3 +30,4 @@ warnings.txt
 client_secret_*.json
 service-account-key.json
 output.json
+backend/.env
