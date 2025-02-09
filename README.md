@@ -68,3 +68,130 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+
+# SimulateX
+
+SimulateX は、複数の AI モデル（GPT-4, Claude, Gemini）を統合し、企業の意思決定支援、シミュレーション、データ解析を行うプラットフォームです。
+
+## 🏗 **プロジェクト構成**
+
+simulatex/
+│── backend/          # バックエンド（FastAPI / Flask, Weaviate, MongoDB）
+│── frontend/         # フロントエンド（React / Vue.js）
+│── public/           # 静的リソース（HTML, CSS, JavaScript）
+│── docker-compose.yml # Docker 設定
+│── README.md         # このファイル
+
+---
+
+## **1️⃣ Backend (`backend/`)**
+### **📌 概要**
+バックエンドは `FastAPI` または `Flask` をベースにし、各 LLM（GPT-4, Claude, Gemini）との連携、データ管理、API通信、ログ処理を担当。
+
+### **🔹 主要機能**
+- **マルチ LLM 連携**（GPT-4, Claude, Gemini）
+- **Weaviate データベース** との接続 (`weaviate_connection_pool.py`)
+- **ワークフロー管理** (`workflow_manager.py`)
+- **データ処理・整形** (`data_manager.py`)
+- **API サーバー機能** (`app.py`)
+- **エージェント型 AI システム** (`agents/`)
+
+### **📌 使用技術**
+- `Python`
+- `FastAPI / Flask`
+- `Weaviate`
+- `LangChain`
+- `MongoDB`
+
+### **⚙️ 起動方法**
+```bash
+cd backend
+pip install -r requirements.txt
+python app.py
+
+🚧 開発途中の機能
+	•	✅ API認証: JWT認証の導入（開発中）
+	•	✅ ログ管理: エラーログの詳細記録（調整中）
+	•	✅ マルチ LLM の統合: 設定ファイルを使い AI の切り替えを可能にする（テスト中）
+	•	🛠️ WebSocket: リアルタイム応答用に WebSocket 実装（計画中）
+
+2️⃣ Public (public/)
+
+📌 概要
+
+このディレクトリにはフロントエンドの静的リソースが格納されており、React や Vue.js で作られた UI のベースを提供。
+
+📌 主要ファイル
+	•	index.html → フロントエンドのエントリーポイント
+	•	favicon.ico → アプリアイコン
+	•	logo192.png, logo512.png → ロゴ画像
+	•	manifest.json → PWA 対応設定
+	•	robots.txt → SEO 設定
+
+📌 使用技術
+	•	HTML
+	•	CSS
+	•	JavaScript
+        •       Python       
+
+🚧 開発途中の機能
+	•	✅ ダークモード: ユーザー設定に応じた UI カスタマイズ（デザイン調整中）
+	•	✅ モバイル最適化: スマホ対応（UI 調整中）
+
+3️⃣ Frontend (src/)
+
+📌 概要
+
+フロントエンドは React と Vue.js を採用し、ダッシュボード・データ表示・AI モデルとのやり取りを担当。
+
+📌 主要ファイル
+	•	App.js → メインのコンポーネント
+	•	index.js → React アプリのエントリーポイント
+	•	components/ → 各種 UI コンポーネント
+	•	reportWebVitals.js → パフォーマンス計測
+	•	setupTests.js → ユニットテスト設定
+
+📌 使用技術
+	•	React
+	•	Vue.js
+	•	JavaScript (ES6+)
+	•	CSS / SCSS
+
+⚙️ 起動方法
+
+cd frontend
+npm install
+npm start
+
+🚧 開発途中の機能
+	•	✅ UI/UX 改善: より直感的なダッシュボードデザイン（調整中）
+	•	✅ フィルタリング機能: ユーザーがデータを動的に検索できるようにする（開発中）
+	•	🛠️ 多言語対応: 日本語 / 英語の翻訳機能（計画中）
+
+🚀 インストールと起動方法
+
+1. Backend のセットアップ
+
+cd backend
+pip install -r requirements.txt
+python app.py
+
+2. Frontend のセットアップ
+
+cd frontend
+npm install
+npm start
+
+✅ 主要な機能
+	•	マルチ AI 連携: GPT-4, Claude, Gemini を活用した意思決定支援
+	•	ナレッジベース: Weaviate によるデータ管理
+	•	ダッシュボード: ユーザー向けデータ解析ツール
+	•	リアルタイム処理: WebSocket ベースの応答（開発中）
+
+📌 開発中の課題
+	•	🛠️ セキュリティ強化: API 認証の導入（進行中）
+	•	🛠️ レスポンス最適化: キャッシュの導入（計画中）
+	•	🛠️ LLM の応答精度向上: LangChain の最適化（調整中）
+
