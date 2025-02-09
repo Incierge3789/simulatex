@@ -32,3 +32,6 @@ service-account-key.json
 output.json
 backend/.env
 backend/.env
+.env
+.env.development
+backend/.env.cloud
